@@ -10,32 +10,43 @@ Testing and profiling code with the CUDA API
  
  * Nvidia defines uint3 type - essentialy a struct with 3 members: x,y,z - which is returned by most of it's pre-initialized variables
 
-### Thread Id's
- ```
- threadIdx.x
- threadIdx.y
- threadIdx.z
- ```
+```cpp
+// Acessing thread index
+threadIdx.x
+threadIdx.y
+threadIdx.z
 
-### Block Id's
-```
+// Acessing block index
 blockId.x
 blockId.y
 blockId.z
+ 
 ```
 
  * There is also the type dim3, returned by the following methods
 
-### Block dimension (measured in threads)
-```
+```cpp
+// Block dimension (measured in threads)
 blockDim.x
 blockDim.y
 blockDim.z
 
-```
-### Grid dimension (measured in blocks)
-```
+// Grid dimension (measured in blocks)
 gridDim.x
 gridDim.y
 gridDim.z
+```
+
+### DEBUGGING
+ * The following macro is useful from wrapping CUDA API calls
+
+ ```cpp
+#define CHECK(call) {
+ const cudaError_t error = call;
+ if(error != cudaSuccess) {
+	 printf("Error: %s:%d, ", __FILE__, __LINE__);
+	 printf("code:%d, reason: %s\n", error, cudaGetErrorString(error));
+	 exit(1);
+ }
+}
 ```
